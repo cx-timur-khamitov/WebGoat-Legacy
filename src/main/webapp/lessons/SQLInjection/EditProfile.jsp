@@ -1,11 +1,12 @@
-<%@ page contentType="text/html; charset=ISO-8859-1" language="java" 
-	import="java.util.*, org.owasp.webgoat.session.*, org.owasp.webgoat.lessons.SQLInjection.SQLInjection" 
+<%@ page contentType="text/html; charset=ISO-8859-1" language="java"
+	import="java.util.*, org.owasp.webgoat.session.*, org.owasp.webgoat.lessons.SQLInjection.SQLInjection"
 	errorPage="" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%
 	WebSession webSession = ((WebSession)session.getAttribute("websession"));
 	Employee employee = (Employee) session.getAttribute("SQLInjection.Employee");
 %>
-		<div class="lesson_title_box"><strong>Welcome Back </strong><span class="lesson_text_db"><%=webSession.getUserNameInLesson()%></span></div>
+		<div class="lesson_title_box"><strong>Welcome Back </strong><span class="lesson_text_db">${fn:escapeXml(webSession.getUserNameInLesson())}</span></div>
 		<div class="lesson_text">
 			<form id="form1" name="form1" method="post" action="<%=webSession.getCurrentLesson().getFormAction()%>">
 				<Table>
