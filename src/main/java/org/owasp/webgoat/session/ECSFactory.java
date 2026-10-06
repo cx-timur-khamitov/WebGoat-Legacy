@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.StringTokenizer;
 import java.util.Vector;
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.ecs.Element;
 import org.apache.ecs.ElementContainer;
 import org.apache.ecs.StringElement;
@@ -480,7 +481,11 @@ public class ECSFactory
 
 		Select s = new Select(name);
 
-		s.addElement(options.toArray(new String[options.size()]));
+		// HTML-encode each option value before rendering to prevent stored XSS
+		for (String option : options)
+		{
+			s.addElement(StringEscapeUtils.escapeHtml4(option));
+		}
 
 		return (s);
 	}
