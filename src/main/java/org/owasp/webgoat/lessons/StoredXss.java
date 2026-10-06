@@ -304,7 +304,8 @@ public class StoredXss extends LessonAdapter {
                 results.beforeFirst();
 
                 for (int i = 0; results.next(); i++) {
-                    A a = ECSFactory.makeLink(results.getString(TITLE_COL), NUMBER, results.getInt(NUM_COL));
+                    // HTML-encode the title from the database to prevent Stored XSS (CWE-79)
+                    A a = ECSFactory.makeLink(HtmlEncoder.encode(results.getString(TITLE_COL)), NUMBER, results.getInt(NUM_COL));
                     TD td = new TD().addElement(a);
                     TR tr = new TR().addElement(td);
                     t.addElement(tr);
