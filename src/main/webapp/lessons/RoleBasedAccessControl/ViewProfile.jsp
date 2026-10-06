@@ -1,12 +1,14 @@
-<%@ page contentType="text/html; charset=ISO-8859-1" language="java" 
-	import="org.owasp.webgoat.session.*, org.owasp.webgoat.lessons.RoleBasedAccessControl.RoleBasedAccessControl" 
+<%@ page contentType="text/html; charset=ISO-8859-1" language="java"
+	import="org.owasp.webgoat.session.*, org.owasp.webgoat.lessons.RoleBasedAccessControl.RoleBasedAccessControl"
 	errorPage="" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%
 	Employee employee = (Employee) session.getAttribute("RoleBasedAccessControl." + RoleBasedAccessControl.EMPLOYEE_ATTRIBUTE_KEY);
 	WebSession webSession = ((WebSession)session.getAttribute("websession"));
 //	int myUserId = getIntSessionAttribute(webSession, "RoleBasedAccessControl." + RoleBasedAccessControl.USER_ID);
+	String userName = webSession.getUserNameInLesson();
 %>
-		<div class="lesson_title_box"><strong>Welcome Back </strong><span class="lesson_text_db"><%=webSession.getUserNameInLesson()%></span> - View Profile Page</div>
+		<div class="lesson_title_box"><strong>Welcome Back </strong><span class="lesson_text_db">${fn:escapeXml(pageScope.userName)}</span> - View Profile Page</div>
 		<div class="lesson_text">
 				<Table>
 				<TR><TD>
