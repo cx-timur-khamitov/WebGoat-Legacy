@@ -12,10 +12,12 @@ import java.io.FileInputStream;
 import org.xml.sax.InputSource;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.Node;
+import javax.xml.namespace.QName;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathFactory;
 import javax.xml.xpath.XPathExpressionException;
+import javax.xml.xpath.XPathVariableResolver;
 import org.apache.ecs.Element;
 import org.apache.ecs.ElementContainer;
 import org.apache.ecs.StringElement;
@@ -139,9 +141,25 @@ public class XPATHInjection extends LessonAdapter
             File d = new File(dir);
             XPathFactory factory = XPathFactory.newInstance();
             XPath xPath = factory.newXPath();
+            // Use XPathVariableResolver to bind user-supplied values as typed variables,
+            // preventing XPath injection by keeping user data out of the expression syntax.
+            final String finalUsername = username;
+            final String finalPassword = password;
+            xPath.setXPathVariableResolver(new XPathVariableResolver() {
+                public Object resolveVariable(QName variableName) {
+                    if ("username".equals(variableName.getLocalPart())) {
+                        return finalUsername;
+                    }
+                    if ("password".equals(variableName.getLocalPart())) {
+                        return finalPassword;
+                    }
+                    return null;
+                }
+            });
             InputSource inputSource = new InputSource(new FileInputStream(d));
-            String expression = "/employees/employee[loginID/text()='" + username + "' and passwd/text()='" + password
-                    + "']";
+            // Parameterized expression: $username and $password are resolved via
+            // XPathVariableResolver and are never interpreted as XPath syntax.
+            String expression = "/employees/employee[loginID/text()=$username and passwd/text()=$password]";
             nodes = (NodeList) xPath.evaluate(expression, inputSource, XPathConstants.NODESET);
             int nodesLength = nodes.getLength();
 
