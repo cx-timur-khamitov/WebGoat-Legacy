@@ -57,7 +57,7 @@ public abstract class BaseService {
     public @ResponseBody
     ExceptionInfo handleException(HttpServletRequest request, Exception ex) {
         String url = request.getRequestURL().toString();
-        logger.error("Exception handler for service caught exception when processing: " + url, ex);
+        logger.error("Exception handler for service caught exception when processing: {}", url, ex);
         ExceptionInfo response = new ExceptionInfo();
         response.setUrl(url);
         
