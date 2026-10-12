@@ -259,7 +259,9 @@ public class HammerHead extends HttpServlet {
     public void log(HttpServletRequest request, String message) {
         String output = new Date() + " | " + request.getRemoteHost() + ":" + request.getRemoteAddr() + " | " + message;
         log(output);
-        logger.debug(output);
+        // Use parameterized logging to prevent log forging (CWE-117): user-controlled
+        // data is passed as a separate argument rather than concatenated into the message.
+        logger.debug("{}", output);
     }
 
     /*
