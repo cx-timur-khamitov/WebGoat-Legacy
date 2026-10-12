@@ -81,10 +81,10 @@ public class Encoding extends LessonAdapter
 
     private static sun.misc.BASE64Encoder encoder = new sun.misc.BASE64Encoder();
 
-    // encryption constant
-
-    private static byte[] salt = { (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00,
-            (byte) 0x00, (byte) 0x00 };
+    // encryption constant - 16-byte salt required for AES-based PBE
+    private static byte[] salt = { (byte) 0xA9, (byte) 0x9B, (byte) 0xC8, (byte) 0x32, (byte) 0x56, (byte) 0x34,
+            (byte) 0xE3, (byte) 0x03, (byte) 0xDE, (byte) 0xF3, (byte) 0xAB, (byte) 0x12, (byte) 0x7A, (byte) 0x6E,
+            (byte) 0xC1, (byte) 0x5D };
 
     /**
      * Returns the base 64 decoding of a string.
@@ -318,11 +318,11 @@ public class Encoding extends LessonAdapter
         try
         {
 
-            PBEParameterSpec ps = new javax.crypto.spec.PBEParameterSpec(salt, 20);
+            PBEParameterSpec ps = new javax.crypto.spec.PBEParameterSpec(salt, 65536);
 
-            SecretKeyFactory kf = SecretKeyFactory.getInstance("PBEWithMD5AndDES");
+            SecretKeyFactory kf = SecretKeyFactory.getInstance("PBEWithHmacSHA256AndAES_256");
 
-            Cipher passwordDecryptCipher = Cipher.getInstance("PBEWithMD5AndDES/CBC/PKCS5Padding");
+            Cipher passwordDecryptCipher = Cipher.getInstance("PBEWithHmacSHA256AndAES_256");
 
             char[] pass = pw.toCharArray();
 
@@ -363,11 +363,11 @@ public class Encoding extends LessonAdapter
         try
         {
 
-            PBEParameterSpec ps = new javax.crypto.spec.PBEParameterSpec(salt, 20);
+            PBEParameterSpec ps = new javax.crypto.spec.PBEParameterSpec(salt, 65536);
 
-            SecretKeyFactory kf = SecretKeyFactory.getInstance("PBEWithMD5AndDES");
+            SecretKeyFactory kf = SecretKeyFactory.getInstance("PBEWithHmacSHA256AndAES_256");
 
-            Cipher passwordEncryptCipher = Cipher.getInstance("PBEWithMD5AndDES/CBC/PKCS5Padding");
+            Cipher passwordEncryptCipher = Cipher.getInstance("PBEWithHmacSHA256AndAES_256");
 
             char[] pass = pw.toCharArray();
 
