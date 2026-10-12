@@ -75,13 +75,29 @@ public class HtmlClues extends LessonAdapter
      *            Description of the Parameter
      * @return Description of the Return Value
      */
+    /**
+     * Retrieves the expected backdoor password from system property
+     * "htmlclues.backdoor.password", falling back to the environment variable
+     * HTMLCLUES_BACKDOOR_PASSWORD. The credential must be configured externally
+     * so it does not appear as a hardcoded literal in the source code (CWE-259).
+     */
+    private String getBackdoorPassword()
+    {
+        String pw = System.getProperty("htmlclues.backdoor.password");
+        if (pw == null || pw.isEmpty())
+        {
+            pw = System.getenv("HTMLCLUES_BACKDOOR_PASSWORD");
+        }
+        return (pw != null) ? pw : "";
+    }
+
     private boolean backdoor(WebSession s)
     {
         String username = s.getParser().getRawParameter(USERNAME, "");
         String password = s.getParser().getRawParameter(PASSWORD, "");
 
         // <START_OMIT_SOURCE>
-        return (username.equals("admin") && password.equals("adminpw"));
+        return (username.equals("admin") && password.equals(getBackdoorPassword()));
         // <END_OMIT_SOURCE>
     }
 
