@@ -318,11 +318,11 @@ public class Encoding extends LessonAdapter
         try
         {
 
-            PBEParameterSpec ps = new javax.crypto.spec.PBEParameterSpec(salt, 20);
+            PBEParameterSpec ps = new javax.crypto.spec.PBEParameterSpec(salt, 65536);
 
-            SecretKeyFactory kf = SecretKeyFactory.getInstance("PBEWithMD5AndDES");
+            SecretKeyFactory kf = SecretKeyFactory.getInstance("PBEWithHmacSHA256AndAES_256");
 
-            Cipher passwordDecryptCipher = Cipher.getInstance("PBEWithMD5AndDES/CBC/PKCS5Padding");
+            Cipher passwordDecryptCipher = Cipher.getInstance("PBEWithHmacSHA256AndAES_256");
 
             char[] pass = pw.toCharArray();
 
@@ -363,11 +363,11 @@ public class Encoding extends LessonAdapter
         try
         {
 
-            PBEParameterSpec ps = new javax.crypto.spec.PBEParameterSpec(salt, 20);
+            PBEParameterSpec ps = new javax.crypto.spec.PBEParameterSpec(salt, 65536);
 
-            SecretKeyFactory kf = SecretKeyFactory.getInstance("PBEWithMD5AndDES");
+            SecretKeyFactory kf = SecretKeyFactory.getInstance("PBEWithHmacSHA256AndAES_256");
 
-            Cipher passwordEncryptCipher = Cipher.getInstance("PBEWithMD5AndDES/CBC/PKCS5Padding");
+            Cipher passwordEncryptCipher = Cipher.getInstance("PBEWithHmacSHA256AndAES_256");
 
             char[] pass = pw.toCharArray();
 
